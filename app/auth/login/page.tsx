@@ -24,13 +24,10 @@ export default function Login() {
     const handleLogin = async (e: React.FormEvent) => {
         e.preventDefault();
         try {
-            console.log('====================================');
-            console.log({ email, password });
-            console.log('====================================');
             const res: AxiosResponse<LoginResponse> = await axios.post("/api/auth/login", { email, password });
             setToken(res.data.token);
             toast.success("Logged in successfully");
-            router.push("/dashboard");
+            router.push("/tasks/");
         } catch (err) {
             if (isAxiosError(err)) {
                 // Check if it's an Axios error and handle it
