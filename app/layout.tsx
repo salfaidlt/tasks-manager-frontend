@@ -34,6 +34,7 @@ export default function RootLayout({
         <ul>
           <li><Link href="/tasks/add">Create task</Link></li>
           <li><Link href="/tasks/">List of tasks</Link></li>
+          <li><Link href="/auth/login">Login</Link></li>
         </ul>
 
         <hr />

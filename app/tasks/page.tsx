@@ -19,6 +19,9 @@ const Tasks = () => {
         const fetchTasks = async () => {
             try {
                 const token = getToken();
+                console.log('====================================');
+                console.log(token);
+                console.log('====================================');
                 const res = await axios.get("/api/tasks/", {
                     headers: { Authorization: token },
                 });

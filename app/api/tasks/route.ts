@@ -8,7 +8,7 @@ export async function GET(req: Request) {
         const res = await axios.get(url, {
             headers: { Authorization: token }
         })
-        return NextResponse.json(res.data)
+        return NextResponse.json(res.data, { status: 200 })
     } catch (error) {
         console.error(error)
     }

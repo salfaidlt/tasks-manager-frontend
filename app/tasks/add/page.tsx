@@ -3,6 +3,7 @@
 import { getToken } from '@/utils/auth'
 import axios from 'axios'
 import React, { useState } from 'react'
+import { toast } from 'react-toastify'
 
 const AddTask = () => {
     const [title, setTitle] = useState("")
@@ -13,20 +14,23 @@ const AddTask = () => {
     const handleLogin = async (e: React.FormEvent) => {
         e.preventDefault()
 
-        try {
-            const url = "/api/tasks/add/"
-            const res = await axios.post(url, {
-                headers: { Authorization: getToken() },
-                data: { title, description, dueTime, status }
-            })
-            console.log('====================================');
-            console.log('====================================');
-            console.log(res);
-            console.log('====================================');
-            console.log("sent from frontend");
-            console.log('====================================');
-        } catch (error) {
-            console.error("Failed to fetch tasks", error);
+        if (getToken()) {
+
+            try {
+                const url = "/api/tasks/add/"
+                const res = await axios.post(url, {
+                    headers: { Authorization: getToken() },
+                    data: { title, description, dueTime, status }
+                });
+                console.log('====================================');
+                console.log('RESPONSE');
+                console.log(res);
+                console.log('====================================');
+            } catch (error) {
+                console.error("Failed to fetch tasks", error);
+            }
+        } else {
+            toast.error("You are not authenticated")
         }
     }
 
