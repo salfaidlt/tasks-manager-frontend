@@ -3,6 +3,7 @@
 import { getToken, getUserId } from '@/utils/auth';
 import axios from 'axios';
 import React, { useEffect, useState } from 'react';
+import { toast } from 'react-toastify';
 
 const AddTask = () => {
     const [title, setTitle] = useState("");
@@ -10,8 +11,6 @@ const AddTask = () => {
     const [dueDate, setDueDate] = useState("");
     const [status, setStatus] = useState("");
     const [token, setToken] = useState<string | null>("");
-    const [error, setError] = useState<string | null>(null);
-    const [success, setSuccess] = useState<string | null>(null);
 
     useEffect(() => {
         setToken(getToken());
@@ -19,13 +18,11 @@ const AddTask = () => {
 
     const handleAdd = async (e: React.FormEvent) => {
         e.preventDefault();
-        setError(null);
-        setSuccess(null);
 
         try {
             const url = "/api/tasks/add/";
             const userId = getUserId()
-            const res = await axios.post(url, {
+            await axios.post(url, {
                 userId,
                 title,
                 description,
@@ -34,24 +31,16 @@ const AddTask = () => {
             }, {
                 headers: { Authorization: token }
             });
-
-            console.log('====================================');
-            console.log('RESPONSE');
-            console.log(res);
-            console.log('====================================');
-
-            setSuccess("Task added successfully!");
+            toast.success("Task added successfully")
         } catch (error) {
             console.error("Failed to add task", error);
-            setError("Failed to add task. Please try again.");
+            toast.error("Error while adding the task")
         }
     };
 
     return (
         <div className="max-w-md mx-auto mt-10 p-6 border border-gray-300 rounded-lg shadow-lg bg-white">
             <h1 className="text-2xl font-bold text-center text-gray-800">Add Task</h1>
-            {error && <p className="text-red-500">{error}</p>}
-            {success && <p className="text-green-500">{success}</p>}
             <form onSubmit={handleAdd} className="mt-4">
                 <input
                     type="text"
