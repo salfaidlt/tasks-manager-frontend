@@ -2,7 +2,6 @@
 
 import { getToken } from '@/utils/auth'
 import axios from 'axios'
-import { useRouter } from 'next/router';
 import React, { useEffect, useState} from 'react'
 import { toast } from 'react-toastify';
 
@@ -18,14 +17,14 @@ const Tasks = () => {
 
     const [tasks, setTasks] = useState([]);
     const [tokenValue, setTokenValue] = useState<string | null>("");
-    const router = useRouter()
+    // const router = useRouter()
     useEffect(() => {
         const fetchTasks = async () => {
             try {
                 const token = getToken();
                 if (!token) {
                     toast.error("You are not connected")
-                    router.push('/login')
+                    // router.push('/login')
                 } else {
                     setTokenValue(token)
                     const res = await axios.get("/api/tasks/", {
@@ -41,20 +40,19 @@ const Tasks = () => {
         fetchTasks();
     }, []);
 
-    const deleteItem = (taskId: string) => {
+    const deleteItem = async (taskId: string) => {
         const url = `/api/tasks/delete/${taskId}`
         try {
-            const res = axios.delete(url, {
+            const res = await axios.delete(url, {
                 headers: { 
                     Authorization: tokenValue,
                     taskId: taskId
                 },
             })
-            console.log('====================================');
-            console.log(res);
-            console.log('====================================');
+            toast.success(res.data)
         } catch (error) {
             console.error(error)
+            toast.error("Error occured while deleting")
         }
     }
 

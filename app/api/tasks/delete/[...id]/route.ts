@@ -1,17 +1,17 @@
 import axios from "axios";
 import { NextResponse } from "next/server";
 
-export async function GET (req: Request, {params}: { params: { id: string } }) {
+export async function DELETE (req: Request) {
     try {
-        const url = `${process.env.BACKEND_API_BASE_URL}/tasks/${params.id}`
-        const res = axios.delete(url, {
-            headers: { Authorization: }
+        const token = req.headers.get('Authorization')
+        const taskId = req.headers.get('taskId')
+        const url = `${process.env.BACKEND_API_BASE_URL}/tasks/${taskId}`
+        const res = await axios.delete(url, {
+            headers: { Authorization: token }
         })
+        return NextResponse.json((await res).data, { status: 200 })
     } catch (error) {
         console.error(error)
     }
-    console.log('====================================');
-    console.log(req);
-    console.log('====================================');
-    return NextResponse.json({id: params.id}, { status: 200 })
+    // return NextResponse.json({id: params.id}, { status: 200 })
 }
