@@ -3,12 +3,13 @@
 import { useState } from "react";
 import axios, { isAxiosError } from "axios"; // Import isAxiosError here
 import { useRouter } from "next/navigation";
-import { setToken } from "@/utils/auth";
+import { setToken, setUserId } from "@/utils/auth";
 import { toast } from "react-toastify";
 import { AxiosResponse } from "axios";
 
 interface LoginResponse {
     token: string;
+    userId: string;
 }
 
 interface ErrorResponse {
@@ -26,6 +27,7 @@ export default function Login() {
         try {
             const res: AxiosResponse<LoginResponse> = await axios.post("/api/auth/login", { email, password });
             setToken(res.data.token);
+            setUserId(res.data.userId)
             toast.success("Logged in successfully");
             router.push("/tasks/");
         } catch (err) {
